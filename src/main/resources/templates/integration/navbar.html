@@ -1,0 +1,60 @@
+<!-- templates/integration/navbar.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Navbar</title>
+</head>
+<body>
+<div th:fragment="navbars">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Accueil</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/utilisateurs">Utilisateurs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/chat">Chat</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasAnyAuthority('ADMIN')">
+                        <a class="nav-link" href="/utilisateurs/creer">Ajouter un utilisateur</a>
+                    </li>
+                </ul>
+
+                <ul class="navbar-nav ms-auto" th:if="${#ctx.session.currentUser != null}">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" th:text="${#ctx.session.currentUser.pseudo}">
+                            Dropdown
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <a class="dropdown-item" th:href="@{|/utilisateurs/${#ctx.session.currentUser.no_utilisateur}/detail|}">Profil</a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item" th:href="@{/logout}" th:text="|Déconnecter l'utilisateur : ${#authentication.name}|">Déconnexion</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <ul class="navbar-nav ms-auto" th:if="${#ctx.session.currentUser == null}">
+                    <li class="nav-item">
+                        <a class="btn btn-primary me-2" href="/login">Se connecter</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-secondary" href="/register/creer">S'inscrire</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+</div>
+</body>
+</html>
